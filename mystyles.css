@@ -1,0 +1,96 @@
+/* General Page Styling */
+body {
+    background: linear-gradient(to right, #dbeafe, #f0f9ff);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1e293b;
+    margin: 20px;
+}
+
+/* Headings */
+h1 {
+    color: #1d4ed8;
+    text-align: center;
+}
+
+h2 {
+    color: #334155;
+}
+
+/* Links */
+a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Lists */
+ol {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+ul {
+    margin-top: 10px;
+}
+
+/* Image Styling */
+img {
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+    width: 300px;
+}
+
+/* Video Styling */
+iframe {
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+
+/* DIVS (Requirement: at least 3) */
+.box1 {
+    background-color: #bfdbfe;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 10px;
+}
+
+.box2 {
+    background-color: #bbf7d0;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 10px;
+}
+
+.box3 {
+    background-color: #fecaca;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 10px;
+}
+
+/* Tableau container */
+#viz {
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* Center Tableau container */
+#viz {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* Center the inner Tableau object */
+.tableauPlaceholder {
+    display: flex;
+    justify-content: center;
+}
+

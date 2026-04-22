@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Golf Tic Tac Toe</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #2e7d32, #66bb6a);
+      color: white;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 36px;
+    }
+
+    #score {
+      margin-bottom: 15px;
+      font-size: 20px;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 12px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 110px);
+      gap: 10px;
+    }
+
+    .cell {
+      width: 110px;
+      height: 110px;
+      background: #e8f5e9;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    .cell:hover {
+      transform: scale(1.05);
+      background: #c8e6c9;
+    }
+
+    .cell.X {
+      color: #1b5e20;
+    }
+
+    .cell.O {
+      color: #37474f;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 20px;
+      min-height: 24px;
+    }
+
+    #resetBtn {
+      margin-top: 15px;
+      padding: 10px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #ffd54f;
+      color: #333;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    #resetBtn:hover {
+      background: #ffca28;
+      transform: scale(1.05);
+    }
+
+    /* 🔥 Styled Navigation Links */
+    .nav-links {
+      margin-top: 25px;
+    }
+
+    .nav-links a {
+      display: inline-block;
+      margin: 8px;
+      padding: 10px 16px;
+      background: #1b5e20;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      background: #2e7d32;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>⛳ Tic-Tac-Golf</h1>
+<div id="score">You: 0 | Computer: 0</div>
+
+<div class="board" id="board"></div>
+
+<div id="message"></div>
+<button id="resetBtn">Restart Match</button>
+
+<script>
+  const board = document.getElementById('board');
+  const message = document.getElementById('message');
+  const scoreDisplay = document.getElementById('score');
+
+  let cells = [];
+  let gameActive = true;
+  let playerScore = 0;
+  let computerScore = 0;
+
+  const CLUBS = "⛳";  // ✅ golf flag
+  const BALL = "⚪";
+
+  function createBoard() {
+    board.innerHTML = '';
+    cells = [];
+
+    for (let i = 0; i < 9; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.dataset.index = i;
+      cell.addEventListener('click', handlePlayerMove);
+      board.appendChild(cell);
+      cells.push(cell);
+    }
+
+    gameActive = true;
+    message.textContent = "Your swing!";
+  }
+
+  function handlePlayerMove(e) {
+    if (!gameActive) return;
+
+    const cell = e.target;
+    if (cell.textContent !== '') return;
+
+    cell.textContent = CLUBS;
+    cell.classList.add('X');
+
+    if (checkWinner(CLUBS)) {
+      playerScore++;
+      endRound('🏆 You sank the putt!');
+      return;
+    }
+
+    if (isTie()) {
+      endRound("🤝 It's a tie on the course!");
+      return;
+    }
+
+    setTimeout(computerMove, 400);
+  }
+
+  function computerMove() {
+    let emptyCells = cells.filter(c => c.textContent === '');
+    if (emptyCells.length === 0) return;
+
+    let randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    randomCell.textContent = BALL;
+    randomCell.classList.add('O');
+
+    if (checkWinner(BALL)) {
+      computerScore++;
+      endRound('💻 Computer sinks it!');
+      return;
+    }
+
+    if (isTie()) {
+      endRound("🤝 It's a tie on the course!");
+    }
+  }
+
+  function checkWinner(player) {
+    const wins = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    return wins.some(combo =>
+      combo.every(i => cells[i].textContent === player)
+    );
+  }
+
+  function isTie() {
+    return cells.every(cell => cell.textContent !== '');
+  }
+
+  function endRound(text) {
+    gameActive = false;
+    message.textContent = text;
+    updateScore();
+
+    if (playerScore === 3 || computerScore === 3) {
+      setTimeout(() => {
+        alert(playerScore === 3 ? '🏆 You won the match!' : '💻 Computer won the match!');
+        resetMatch();
+      }, 300);
+    } else {
+      setTimeout(createBoard, 1200);
+    }
+  }
+
+  function updateScore() {
+    scoreDisplay.textContent = `You: ${playerScore} | Computer: ${computerScore}`;
+  }
+
+  function resetMatch() {
+    playerScore = 0;
+    computerScore = 0;
+    updateScore();
+    createBoard();
+  }
+
+  document.getElementById('resetBtn').addEventListener('click', resetMatch);
+
+  createBoard();
+</script>
+
+<!-- ✅ Styled Links -->
+<div class="nav-links">
+  <a href="index.html">🏠 Resume Page</a>
+  <a href="fromScratch.html">🐐 Tiger Woods Shrine</a>
+</div>
+
+</body>
+</html>
